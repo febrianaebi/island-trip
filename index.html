@@ -16,15 +16,17 @@ overflow:hidden;
 h1{
 margin-top:80px;
 font-size:40px;
+padding:20px;
 }
 
 button{
 padding:15px 30px;
 font-size:20px;
-margin:20px;
+margin:15px;
 border:none;
 border-radius:12px;
 cursor:pointer;
+transition:0.3s;
 }
 
 #yes{
@@ -33,20 +35,19 @@ color:white;
 }
 
 #no{
-background:#aaa;
+background:#999;
 color:white;
-position:absolute;
 }
 
 .heart{
 position:fixed;
-font-size:25px;
+font-size:24px;
 animation:heart 4s linear infinite;
 }
 
 @keyframes heart{
 0%{transform:translateY(0)}
-100%{transform:translateY(-100vh)}
+100%{transform:translateY(-110vh)}
 }
 
 .plane{
@@ -73,9 +74,9 @@ animation:sadFall 4s linear infinite;
 100%{top:110%}
 }
 
-/* ISLAND */
+/* ISLAND SCENE */
 
-#islandScene{
+#island{
 display:none;
 position:fixed;
 top:0;
@@ -85,6 +86,7 @@ height:100%;
 background:url("https://images.unsplash.com/photo-1507525428034-b723cf961d3e");
 background-size:cover;
 background-position:center;
+color:white;
 }
 
 /* WAVES */
@@ -116,58 +118,6 @@ bottom:40px;
 100%{transform:translateX(-50%)}
 }
 
-/* SUN */
-
-.sun{
-position:absolute;
-width:120px;
-height:120px;
-background:radial-gradient(circle,#ffd54f,#ff9800);
-border-radius:50%;
-top:20%;
-left:50%;
-transform:translateX(-50%);
-animation:sunset 10s forwards;
-}
-
-@keyframes sunset{
-0%{top:15%}
-100%{top:60%}
-}
-
-/* PALM */
-
-.palm{
-position:absolute;
-bottom:120px;
-left:20%;
-font-size:80px;
-animation:palm 3s ease-in-out infinite;
-}
-
-@keyframes palm{
-0%{transform:rotate(-3deg)}
-50%{transform:rotate(3deg)}
-100%{transform:rotate(-3deg)}
-}
-
-/* BIRD */
-
-.bird{
-position:absolute;
-top:20%;
-left:-50px;
-font-size:30px;
-animation:bird 12s linear infinite;
-}
-
-@keyframes bird{
-0%{left:-50px}
-100%{left:110%}
-}
-
-/* CONFETTI */
-
 .confetti{
 position:fixed;
 font-size:25px;
@@ -184,48 +134,104 @@ animation:confetti 4s linear infinite;
 
 <body>
 
-<h1 id="question">Will you go to island with me?</h1>
+<h1 id="text">Would you take me on a trip to an island?</h1>
 
-<button id="yes">YES</button>
-<button id="no">NO</button>
+<div id="buttons">
+<button id="yes">Yes</button>
+<button id="no">No</button>
+</div>
 
 <div class="plane">✈️</div>
 
-<div id="islandScene">
-
-<div class="sun"></div>
+<div id="island">
 
 <div class="wave"></div>
 <div class="wave wave2"></div>
 <div class="wave wave3"></div>
 
-<div class="palm">🌴</div>
-
-<div class="bird">🐦</div>
-
-<h1 style="margin-top:100px;color:white;">
-Pack your bag, we're going to island 🏝
+<h1 style="margin-top:120px;">
+Pack your bag, we're going to the island 🏝
 </h1>
 
 </div>
 
 <script>
 
-const noBtn=document.getElementById("no")
-const yesBtn=document.getElementById("yes")
-const island=document.getElementById("islandScene")
+let step=0
+let yesSize=1
 
-let scale=1
+const text=document.getElementById("text")
+const yes=document.getElementById("yes")
+const no=document.getElementById("no")
+const island=document.getElementById("island")
 
-noBtn.addEventListener("mouseover",()=>{
+const messages=[
+"try saying no first. I bet you want to know what happens",
+"go on, hit no… just once",
+"you're missing out",
+"click no… I dare you"
+]
 
-noBtn.style.top=Math.random()*window.innerHeight+"px"
-noBtn.style.left=Math.random()*window.innerWidth+"px"
+yes.onclick=()=>{
 
-scale+=0.2
-yesBtn.style.transform="scale("+scale+")"
+if(step<messages.length){
+
+text.innerText=messages[step]
+step++
+
+sadAnim()
+
+yesSize+=0.3
+yes.style.transform="scale("+yesSize+")"
+
+}else{
+
+showIsland()
+
+}
+
+}
+
+no.onclick=()=>{
+
+if(step<4){
+
+text.innerText="Are you positive?"
+
+}else if(step===4){
+
+text.innerText="Pookie please…"
+
+}else if(step===5){
+
+text.innerText="If you say no I will be really sad"
+
+}else if(step===6){
+
+text.innerText="I will be very sad"
+
+yesSize+=0.5
+yes.style.transform="scale("+yesSize+")"
+
+}else{
+
+text.innerText="Please???"
+
+yesSize+=0.8
+yes.style.transform="scale("+yesSize+")"
+
+}
+
+step++
+
+sadAnim()
+
+}
+
+function sadAnim(){
 
 for(let i=0;i<3;i++){
+
 let sad=document.createElement("div")
 sad.className="sad"
 sad.innerHTML="😢"
@@ -233,19 +239,19 @@ sad.style.left=Math.random()*100+"%"
 document.body.appendChild(sad)
 
 setTimeout(()=>sad.remove(),4000)
+
 }
 
-})
+}
 
-yesBtn.addEventListener("click",()=>{
+function showIsland(){
 
 document.body.innerHTML=""
-
 document.body.appendChild(island)
 
 island.style.display="block"
 
-for(let i=0;i<30;i++){
+for(let i=0;i<40;i++){
 
 let confetti=document.createElement("div")
 confetti.className="confetti"
@@ -255,7 +261,7 @@ document.body.appendChild(confetti)
 
 }
 
-})
+}
 
 /* hearts */
 
