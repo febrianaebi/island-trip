@@ -1,147 +1,300 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Interactive Chat Buttons</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      background-color: #fdf6e3;
-      text-align: center;
-    }
-    #chat {
-      margin-bottom: 30px;
-      font-size: 1.2rem;
-    }
-    .btn-container {
-      display: flex;
-      gap: 20px;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-    button {
-      padding: 10px 20px;
-      font-size: 1rem;
-      cursor: pointer;
-      border: none;
-      border-radius: 8px;
-      background-color: #ffcc00;
-      transition: all 0.2s;
-    }
-    button:hover {
-      background-color: #ffaa00;
-    }
-    #yes-big {
-      font-size: 2rem;
-      padding: 20px 40px;
-      margin-top: 20px;
-    }
-    #please-blur {
-      font-size: 1.5rem;
-      padding: 20px 40px;
-      margin-top: 20px;
-      filter: blur(3px);
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Island Trip 🌴</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial, sans-serif;
+text-align:center;
+background:linear-gradient(to bottom,#a1c4fd,#c2e9fb);
+overflow:hidden;
+}
+
+h1{
+margin-top:80px;
+font-size:2.2em;
+color:#ff4f81;
+}
+
+button{
+padding:12px 25px;
+font-size:18px;
+border:none;
+border-radius:30px;
+cursor:pointer;
+margin:12px;
+transition:0.3s;
+}
+
+#yesBtn{
+background:#ff4f81;
+color:white;
+}
+
+#noBtn{
+background:white;
+}
+
+#message{
+margin-top:25px;
+font-size:20px;
+color:#ff4f81;
+}
+
+/* hearts */
+
+.heart{
+position:absolute;
+font-size:20px;
+animation:fall linear infinite;
+}
+
+@keyframes fall{
+0%{transform:translateY(-10vh);}
+100%{transform:translateY(110vh);}
+}
+
+/* plane */
+
+.plane{
+position:absolute;
+font-size:28px;
+animation:fly 8s linear infinite;
+}
+
+@keyframes fly{
+0%{left:-10%;top:20%;}
+100%{left:110%;top:25%;}
+}
+
+/* island */
+
+.island-img{
+width:80%;
+max-width:500px;
+border-radius:20px;
+margin-top:25px;
+}
+
+.destination{
+margin-top:10px;
+font-size:28px;
+color:white;
+}
+
+.wave{
+position:absolute;
+bottom:80px;
+left:0;
+width:100%;
+height:40px;
+background:rgba(0,200,255,0.6);
+animation:waveMove 3s infinite linear;
+}
+
+@keyframes waveMove{
+0%{transform:translateX(-10px);}
+50%{transform:translateX(10px);}
+100%{transform:translateX(-10px);}
+}
+
+</style>
 </head>
+
 <body>
 
-  <div id="chat">Awal</div>
-  <div class="btn-container" id="buttons">
-    <button id="btn1">Yes</button>
-    <button id="btn2">No</button>
-  </div>
+<iframe width="0" height="0"
+src="https://www.youtube.com/embed/76xtedFgWTA?autoplay=1&loop=1&playlist=76xtedFgWTA"
+frameborder="0" allow="autoplay"></iframe>
 
-  <script>
-    const chat = document.getElementById('chat');
-    const buttons = document.getElementById('buttons');
+<h1>Would you take me on a trip to an island? 🌴✈️</h1>
 
-    let step = 0;
+<div id="buttons">
+<button id="yesBtn">Yes</button>
+<button id="noBtn">No</button>
+</div>
 
-    function renderStep() {
-      buttons.innerHTML = "";
+<div id="message"></div>
 
-      switch(step) {
-        case 0: // Awal
-          chat.textContent = "Awal";
-          createButton("Yes", () => { step = 1; renderStep(); });
-          createButton("No", () => { step = 0; renderStep(); }); // tetap di awal kalau No
-          break;
+<script>
 
-        case 1: // Klik Yes → try saying no first
-          chat.textContent = "try saying no first. I bet you want to know what happens";
-          createButton("Yes", () => { step = 2; renderStep(); });
-          createButton("No", () => { step = 5; renderStep(); }); // langsung lompat ke Yes | Are you positive?
-          break;
+let yesCount=0
+let size=18
+let stage=0
 
-        case 2: // klik Yes → go on, hit no… just once
-          chat.textContent = "go on, hit no… just once";
-          createButton("Yes", () => { step = 3; renderStep(); });
-          break;
+const yesBtn=document.getElementById("yesBtn")
+const noBtn=document.getElementById("noBtn")
+const message=document.getElementById("message")
+const buttons=document.getElementById("buttons")
 
-        case 3: // klik Yes → you're missing out
-          chat.textContent = "you're missing out";
-          createButton("Yes", () => { step = 4; renderStep(); });
-          break;
+startHearts()
+startPlane()
 
-        case 4: // klik Yes → click no… I dare you
-          chat.textContent = "click no… I dare you";
-          createButton("Yes", () => { step = 5; renderStep(); });
-          break;
+yesBtn.onclick=()=>{
 
-        case 5: // Yes | Are you positive?
-          chat.textContent = "Tombol berubah jadi:";
-          createButton("Yes", () => { step = 6; renderStep(); });
-          createButton("Are you positive?", () => { step = 7; renderStep(); });
-          break;
+if(stage<4){
 
-        case 6: // Yes | Baby please…
-          chat.textContent = "Tombol berubah:";
-          createButton("Yes", () => { step = 8; renderStep(); });
-          createButton("Baby please…", () => { step = 8; renderStep(); });
-          break;
+yesCount++
+size+=8
+yesBtn.style.fontSize=size+"px"
 
-        case 7: // If you say no I will be really sad
-          chat.textContent = "";
-          createButton("Yes", () => { step = 9; renderStep(); });
-          createButton("If you say no I will be really sad", () => { step = 9; renderStep(); });
-          break;
+if(stage==0){
+message.innerText="try saying no first. I bet you want to know what happens"
+}
 
-        case 8: // I will be very sad
-          chat.textContent = "";
-          createButton("Yes", () => { step = 10; renderStep(); });
-          createButton("I will be very sad", () => { step = 10; renderStep(); });
-          break;
+if(stage==1){
+message.innerText="go on, hit no… just once"
+}
 
-        case 9: // YES besar | Please??? kabur
-          chat.textContent = "";
-          createButton("YES (lebih besar)", () => { step = 10; renderStep(); }, "yes-big");
-          createButton("Please??? (kabur)", () => { step = 10; renderStep(); }, "please-blur");
-          break;
+if(stage==2){
+message.innerText="you're missing out"
+}
 
-        case 10: // Ending
-          chat.textContent = "Ending pulau 🌴";
-          break;
+if(stage==3){
+message.innerText="click no… I dare you"
+}
 
-      }
-    }
+stage++
 
-    function createButton(text, onClick, id = "") {
-      const btn = document.createElement('button');
-      btn.textContent = text;
-      if(id) btn.id = id;
-      btn.addEventListener('click', onClick);
-      buttons.appendChild(btn);
-    }
+return
+}
 
-    renderStep();
-  </script>
+ending()
+
+}
+
+noBtn.onclick=()=>{
+
+if(stage<4)return
+
+stage=5
+
+buttons.innerHTML=`
+<button id="yesBtn">Yes</button>
+<button id="altBtn">Are you positive?</button>
+`
+
+document.getElementById("yesBtn").onclick=ending
+document.getElementById("altBtn").onclick=step2
+
+}
+
+function step2(){
+
+buttons.innerHTML=`
+<button id="yesBtn">Yes</button>
+<button id="altBtn">Baby please…</button>
+`
+
+document.getElementById("yesBtn").onclick=ending
+document.getElementById("altBtn").onclick=step3
+
+}
+
+function step3(){
+
+buttons.innerHTML=`
+<button id="yesBtn">Yes</button>
+<button id="altBtn">If you say no I will be really sad</button>
+`
+
+document.getElementById("yesBtn").onclick=ending
+document.getElementById("altBtn").onclick=step4
+
+}
+
+function step4(){
+
+buttons.innerHTML=`
+<button id="yesBtn">Yes</button>
+<button id="altBtn">I will be very sad</button>
+`
+
+document.getElementById("yesBtn").onclick=ending
+document.getElementById("altBtn").onclick=step5
+
+}
+
+function step5(){
+
+buttons.innerHTML=`
+<button id="yesBtn" style="font-size:32px;">YES</button>
+<button id="runBtn">Please???</button>
+`
+
+document.getElementById("yesBtn").onclick=ending
+
+const run=document.getElementById("runBtn")
+
+run.onmouseover=()=>{
+
+run.style.position="absolute"
+run.style.left=Math.random()*80+"%"
+run.style.top=Math.random()*80+"%"
+
+}
+
+}
+
+function ending(){
+
+message.innerText="Pack your bag, we’re going to island 🌴✈️"
+
+buttons.innerHTML=`
+
+<div class="wave"></div>
+
+<img class="island-img"
+src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e">
+
+<h2 class="destination">Destination: Us 💙</h2>
+
+`
+
+}
+
+function startHearts(){
+
+setInterval(()=>{
+
+const heart=document.createElement("div")
+
+heart.className="heart"
+heart.innerHTML="💖"
+heart.style.left=Math.random()*100+"vw"
+heart.style.animationDuration=(Math.random()*3+2)+"s"
+
+document.body.appendChild(heart)
+
+setTimeout(()=>heart.remove(),5000)
+
+},400)
+
+}
+
+function startPlane(){
+
+setInterval(()=>{
+
+const plane=document.createElement("div")
+
+plane.className="plane"
+plane.innerHTML="✈️"
+
+document.body.appendChild(plane)
+
+setTimeout(()=>plane.remove(),8000)
+
+},5000)
+
+}
+
+</script>
 
 </body>
 </html>
