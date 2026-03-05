@@ -15,8 +15,7 @@ overflow:hidden;
 
 h1{
 margin-top:80px;
-font-size:38px;
-padding:20px;
+font-size:36px;
 }
 
 button{
@@ -34,17 +33,17 @@ background:#ff4d6d;
 color:white;
 }
 
-#alt{
+#no{
 background:#888;
 color:white;
 position:relative;
 }
 
-/* HEARTS */
+/* hearts */
 
 .heart{
 position:fixed;
-font-size:24px;
+font-size:22px;
 animation:heart 4s linear infinite;
 }
 
@@ -53,20 +52,20 @@ animation:heart 4s linear infinite;
 100%{transform:translateY(-110vh)}
 }
 
-/* SAD EMOJI */
+/* sad */
 
 .sad{
 position:fixed;
-font-size:35px;
-animation:sadFall 4s linear infinite;
+font-size:32px;
+animation:sad 4s linear infinite;
 }
 
-@keyframes sadFall{
+@keyframes sad{
 0%{top:-10%}
 100%{top:110%}
 }
 
-/* ISLAND */
+/* island */
 
 #island{
 display:none;
@@ -81,7 +80,7 @@ background-position:center;
 color:white;
 }
 
-/* WAVES */
+/* waves */
 
 .wave{
 position:absolute;
@@ -110,22 +109,11 @@ bottom:40px;
 100%{transform:translateX(-50%)}
 }
 
-/* FINAL TEXT */
+/* plane */
 
-.finalText{
+.plane{
 position:absolute;
-top:40%;
-width:100%;
-font-size:50px;
-font-weight:bold;
-text-shadow:0 0 10px rgba(0,0,0,0.6);
-}
-
-/* PLANE ENDING */
-
-.planeEnd{
-position:absolute;
-top:20%;
+top:25%;
 left:-200px;
 font-size:50px;
 animation:fly 10s linear forwards;
@@ -134,6 +122,15 @@ animation:fly 10s linear forwards;
 @keyframes fly{
 0%{left:-200px}
 100%{left:110%}
+}
+
+.finalText{
+position:absolute;
+top:40%;
+width:100%;
+font-size:48px;
+font-weight:bold;
+text-shadow:0 0 10px rgba(0,0,0,0.6);
 }
 
 </style>
@@ -145,7 +142,7 @@ animation:fly 10s linear forwards;
 
 <div id="buttons">
 <button id="yes">Yes</button>
-<button id="alt">No</button>
+<button id="no">No</button>
 </div>
 
 <div id="island">
@@ -154,7 +151,7 @@ animation:fly 10s linear forwards;
 <div class="wave wave2"></div>
 <div class="wave wave3"></div>
 
-<div class="planeEnd">✈️</div>
+<div class="plane">✈️</div>
 
 <div class="finalText">
 Destination: Us 🏝
@@ -164,70 +161,100 @@ Destination: Us 🏝
 
 <script>
 
-let step=0
+let stage=1
 let yesSize=1
 
 const text=document.getElementById("text")
 const yes=document.getElementById("yes")
-const alt=document.getElementById("alt")
+const no=document.getElementById("no")
 const island=document.getElementById("island")
-
-const sequence=[
-"try saying no first. I bet you want to know what happens",
-"go on, hit no… just once",
-"you're missing out",
-"click no… I dare you",
-"Are you positive?",
-"Baby please…",
-"If you say no I will be really sad",
-"I will be very sad",
-"Please???"
-]
 
 yes.onclick=()=>{
 
-if(step < sequence.length){
+if(stage===1){
+text.innerText="try saying no first. I bet you want to know what happens"
+stage=2
+}
 
-text.innerText=sequence[step]
+else if(stage===2){
+text.innerText="go on, hit no… just once"
+stage=3
+}
 
-yesSize+=0.35
-yes.style.transform="scale("+yesSize+")"
+else if(stage===3){
+text.innerText="you're missing out"
+stage=4
+}
 
-sadAnim()
+else if(stage===4){
+text.innerText="click no… I dare you"
+stage=5
+}
 
-step++
-
-}else{
+else if(stage===9){
 
 showIsland()
+}
+
+growYes()
 
 }
 
+no.onclick=()=>{
+
+if(stage===5){
+text.innerText="Are you positive?"
+stage=6
 }
 
-alt.onclick=()=>{
+else if(stage===6){
+text.innerText="Baby please…"
+no.innerText="No"
+stage=7
+}
 
-text.innerText=sequence[Math.min(step,sequence.length-1)]
+else if(stage===7){
+text.innerText="If you say no I will be really sad"
+stage=8
+}
+
+else if(stage===8){
+text.innerText="I will be very sad"
+stage=9
+
+yes.innerText="Yes"
+no.innerText="Please???"
+
+yesSize+=0.6
+yes.style.transform="scale("+yesSize+")"
+}
 
 sadAnim()
 
-step++
-
 }
 
-/* RUN AWAY BUTTON */
+/* runaway button */
 
-alt.addEventListener("mouseover",()=>{
+no.addEventListener("mouseover",()=>{
 
-if(text.innerText==="Please???"){
+if(no.innerText==="Please???"){
 
-alt.style.position="absolute"
-alt.style.top=Math.random()*window.innerHeight+"px"
-alt.style.left=Math.random()*window.innerWidth+"px"
+no.style.position="absolute"
+no.style.top=Math.random()*window.innerHeight+"px"
+no.style.left=Math.random()*window.innerWidth+"px"
 
 }
 
 })
+
+function growYes(){
+
+yesSize+=0.25
+yes.style.transform="scale("+yesSize+")"
+
+sadAnim()
+
+}
 
 function sadAnim(){
 
@@ -254,7 +281,7 @@ island.style.display="block"
 
 }
 
-/* floating hearts */
+/* hearts */
 
 setInterval(()=>{
 
@@ -266,7 +293,7 @@ document.body.appendChild(heart)
 
 setTimeout(()=>heart.remove(),4000)
 
-},800)
+},900)
 
 </script>
 
