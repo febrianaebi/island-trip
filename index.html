@@ -37,7 +37,10 @@ color:white;
 #alt{
 background:#888;
 color:white;
+position:relative;
 }
+
+/* HEARTS */
 
 .heart{
 position:fixed;
@@ -50,18 +53,7 @@ animation:heart 4s linear infinite;
 100%{transform:translateY(-110vh)}
 }
 
-.plane{
-position:fixed;
-top:20%;
-left:-200px;
-font-size:40px;
-animation:planeFly 12s linear infinite;
-}
-
-@keyframes planeFly{
-0%{left:-200px}
-100%{left:110%}
-}
+/* SAD EMOJI */
 
 .sad{
 position:fixed;
@@ -118,6 +110,32 @@ bottom:40px;
 100%{transform:translateX(-50%)}
 }
 
+/* FINAL TEXT */
+
+.finalText{
+position:absolute;
+top:40%;
+width:100%;
+font-size:50px;
+font-weight:bold;
+text-shadow:0 0 10px rgba(0,0,0,0.6);
+}
+
+/* PLANE ENDING */
+
+.planeEnd{
+position:absolute;
+top:20%;
+left:-200px;
+font-size:50px;
+animation:fly 10s linear forwards;
+}
+
+@keyframes fly{
+0%{left:-200px}
+100%{left:110%}
+}
+
 </style>
 </head>
 
@@ -130,17 +148,17 @@ bottom:40px;
 <button id="alt">No</button>
 </div>
 
-<div class="plane">✈️</div>
-
 <div id="island">
 
 <div class="wave"></div>
 <div class="wave wave2"></div>
 <div class="wave wave3"></div>
 
-<h1 style="margin-top:120px;">
-Pack your bag, we're going to the island 🏝
-</h1>
+<div class="planeEnd">✈️</div>
+
+<div class="finalText">
+Destination: Us 🏝
+</div>
 
 </div>
 
@@ -154,14 +172,11 @@ const yes=document.getElementById("yes")
 const alt=document.getElementById("alt")
 const island=document.getElementById("island")
 
-const yesMessages=[
+const sequence=[
 "try saying no first. I bet you want to know what happens",
 "go on, hit no… just once",
 "you're missing out",
-"click no… I dare you"
-]
-
-const altMessages=[
+"click no… I dare you",
 "Are you positive?",
 "Baby please…",
 "If you say no I will be really sad",
@@ -171,11 +186,11 @@ const altMessages=[
 
 yes.onclick=()=>{
 
-if(step<yesMessages.length){
+if(step < sequence.length){
 
-text.innerText=yesMessages[step]
+text.innerText=sequence[step]
 
-yesSize+=0.3
+yesSize+=0.35
 yes.style.transform="scale("+yesSize+")"
 
 sadAnim()
@@ -192,30 +207,27 @@ showIsland()
 
 alt.onclick=()=>{
 
-let index=step-yesMessages.length
-
-if(index>=0 && index<altMessages.length){
-
-text.innerText=altMessages[index]
-
-yesSize+=0.4
-yes.style.transform="scale("+yesSize+")"
+text.innerText=sequence[Math.min(step,sequence.length-1)]
 
 sadAnim()
 
 step++
 
-}else{
+}
 
-step=yesMessages.length
+/* RUN AWAY BUTTON */
 
-text.innerText=altMessages[0]
+alt.addEventListener("mouseover",()=>{
 
-sadAnim()
+if(text.innerText==="Please???"){
+
+alt.style.position="absolute"
+alt.style.top=Math.random()*window.innerHeight+"px"
+alt.style.left=Math.random()*window.innerWidth+"px"
 
 }
 
-}
+})
 
 function sadAnim(){
 
@@ -242,7 +254,7 @@ island.style.display="block"
 
 }
 
-/* hearts */
+/* floating hearts */
 
 setInterval(()=>{
 
