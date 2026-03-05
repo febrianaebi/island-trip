@@ -3,9 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Island Trip? 🌴</title>
+<title>Island Trip 🌴</title>
 
 <style>
+
 body{
 margin:0;
 font-family:Arial, sans-serif;
@@ -26,7 +27,7 @@ font-size:18px;
 border:none;
 border-radius:30px;
 cursor:pointer;
-margin:15px;
+margin:12px;
 transition:0.3s;
 }
 
@@ -45,6 +46,8 @@ font-size:20px;
 color:#ff4f81;
 }
 
+/* hearts */
+
 .heart{
 position:absolute;
 font-size:20px;
@@ -55,6 +58,8 @@ animation:fall linear infinite;
 0%{transform:translateY(-10vh);}
 100%{transform:translateY(110vh);}
 }
+
+/* plane */
 
 .plane{
 position:absolute;
@@ -67,33 +72,29 @@ animation:fly 8s linear infinite;
 100%{left:110%;top:25%;}
 }
 
-/* Island Ending */
-
-.island-scene{
-margin-top:40px;
-position:relative;
-}
+/* island */
 
 .island-img{
 width:80%;
 max-width:500px;
 border-radius:20px;
+margin-top:25px;
 }
 
 .destination{
-margin-top:15px;
-color:white;
+margin-top:10px;
 font-size:28px;
+color:white;
 }
 
 .wave{
 position:absolute;
-bottom:0;
+bottom:80px;
+left:0;
 width:100%;
 height:40px;
 background:rgba(0,200,255,0.6);
 animation:waveMove 3s infinite linear;
-border-radius:20px;
 }
 
 @keyframes waveMove{
@@ -107,7 +108,6 @@ border-radius:20px;
 
 <body>
 
-<!-- music -->
 <iframe width="0" height="0"
 src="https://www.youtube.com/embed/76xtedFgWTA?autoplay=1&loop=1&playlist=76xtedFgWTA"
 frameborder="0" allow="autoplay"></iframe>
@@ -125,95 +125,119 @@ frameborder="0" allow="autoplay"></iframe>
 
 let yesCount=0
 let size=18
+let stage=0
 
 const yesBtn=document.getElementById("yesBtn")
 const noBtn=document.getElementById("noBtn")
 const message=document.getElementById("message")
-const buttonsDiv=document.getElementById("buttons")
+const buttons=document.getElementById("buttons")
 
 startHearts()
 startPlane()
 
-yesBtn.addEventListener("click",()=>{
+yesBtn.onclick=()=>{
+
+if(stage<4){
 
 yesCount++
 size+=8
 yesBtn.style.fontSize=size+"px"
 
-if(yesCount===1){
+if(stage==0){
 message.innerText="try saying no first. I bet you want to know what happens"
 }
 
-else if(yesCount===2){
+if(stage==1){
 message.innerText="go on, hit no… just once"
 }
 
-else if(yesCount===3){
-message.innerText="you’re missing out"
+if(stage==2){
+message.innerText="you're missing out"
 }
 
-else if(yesCount===4){
+if(stage==3){
 message.innerText="click no… I dare you"
 }
 
-})
+stage++
 
-noBtn.addEventListener("click",()=>{
+return
+}
 
-buttonsDiv.innerHTML=`
-<button onclick="chooseYes()">Yes</button>
-<button onclick="choosePositive()">Are you positive?</button>
-`
-
-})
-
-function chooseYes(){
 ending()
+
 }
 
-function choosePositive(){
+noBtn.onclick=()=>{
 
-buttonsDiv.innerHTML=`
-<button onclick="chooseYes()">No</button>
-<button onclick="chooseBaby()">Baby please…</button>
+if(stage<4)return
+
+stage=5
+
+buttons.innerHTML=`
+<button id="yesBtn">Yes</button>
+<button id="altBtn">Are you positive?</button>
 `
 
+document.getElementById("yesBtn").onclick=ending
+document.getElementById("altBtn").onclick=step2
+
 }
 
-function chooseBaby(){
+function step2(){
 
-buttonsDiv.innerHTML=`
-<button onclick="chooseYes()">No</button>
-<button onclick="chooseSad()">If you say no I will be really sad</button>
+buttons.innerHTML=`
+<button id="yesBtn">Yes</button>
+<button id="altBtn">Baby please…</button>
 `
 
+document.getElementById("yesBtn").onclick=ending
+document.getElementById("altBtn").onclick=step3
+
 }
 
-function chooseSad(){
+function step3(){
 
-buttonsDiv.innerHTML=`
-<button onclick="chooseYes()">No</button>
-<button onclick="chooseVerySad()">I will be very sad</button>
+buttons.innerHTML=`
+<button id="yesBtn">Yes</button>
+<button id="altBtn">If you say no I will be really sad</button>
 `
 
+document.getElementById("yesBtn").onclick=ending
+document.getElementById("altBtn").onclick=step4
+
 }
 
-function chooseVerySad(){
+function step4(){
 
-buttonsDiv.innerHTML=`
-<button style="font-size:26px" onclick="chooseYes()">Yes</button>
-<button id="runBtn" onmouseover="runAway()">Please???</button>
+buttons.innerHTML=`
+<button id="yesBtn">Yes</button>
+<button id="altBtn">I will be very sad</button>
 `
 
+document.getElementById("yesBtn").onclick=ending
+document.getElementById("altBtn").onclick=step5
+
 }
 
-function runAway(){
+function step5(){
 
-const btn=document.getElementById("runBtn")
+buttons.innerHTML=`
+<button id="yesBtn" style="font-size:32px;">YES</button>
+<button id="runBtn">Please???</button>
+`
 
-btn.style.position="absolute"
-btn.style.left=Math.random()*80+"vw"
-btn.style.top=Math.random()*80+"vh"
+document.getElementById("yesBtn").onclick=ending
+
+const run=document.getElementById("runBtn")
+
+run.onmouseover=()=>{
+
+run.style.position="absolute"
+run.style.left=Math.random()*80+"%"
+run.style.top=Math.random()*80+"%"
+
+}
 
 }
 
@@ -221,18 +245,14 @@ function ending(){
 
 message.innerText="Pack your bag, we’re going to island 🌴✈️"
 
-buttonsDiv.innerHTML=`
-
-<div class="island-scene">
-
-<img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e"
-class="island-img">
+buttons.innerHTML=`
 
 <div class="wave"></div>
 
-<h2 class="destination">Destination: Us 💙</h2>
+<img class="island-img"
+src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e">
 
-</div>
+<h2 class="destination">Destination: Us 💙</h2>
 
 `
 
@@ -243,7 +263,8 @@ function startHearts(){
 setInterval(()=>{
 
 const heart=document.createElement("div")
-heart.classList.add("heart")
+
+heart.className="heart"
 heart.innerHTML="💖"
 heart.style.left=Math.random()*100+"vw"
 heart.style.animationDuration=(Math.random()*3+2)+"s"
@@ -261,7 +282,8 @@ function startPlane(){
 setInterval(()=>{
 
 const plane=document.createElement("div")
-plane.classList.add("plane")
+
+plane.className="plane"
 plane.innerHTML="✈️"
 
 document.body.appendChild(plane)
